@@ -22,6 +22,7 @@ Source0: %{distname}.tar.bz2
 License: GPL
 Group: System/Libraries
 Url: http://freeimage.sourceforge.net/
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 %{common_description}
