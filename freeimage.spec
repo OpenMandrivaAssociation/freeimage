@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.93
-%define release %mkrel 1
+%define release %mkrel 3
 %define oname FreeImage
 %define oversion %(echo %{version} | sed -e 's/\\.//g')
 %define distname %{oname}%{oversion}
