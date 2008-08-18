@@ -1,6 +1,6 @@
 %define name freeimage
-%define version 3.93
-%define release %mkrel 3
+%define version 3.110
+%define release %mkrel 1
 %define oname FreeImage
 %define oversion %(echo %{version} | sed -e 's/\\.//g')
 %define distname %{oname}%{oversion}
@@ -11,18 +11,26 @@ TIFF and others as needed by today's multimedia applications.\
 FreeImage is easy to use, fast, multithreading safe, compatible with\
 all 32-bit versions of Windows, and cross-platform (works both with\
 Linux and Mac OS X).
+
 %define lib_major 3
 %define lib_name %mklibname %{name} %{lib_major}
+%define devel_name %mklibname %{name} -d
 
 Summary: %{common_summary}
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: %{distname}.tar.bz2
+Source0: %{distname}.zip
 License: GPL
 Group: System/Libraries
 Url: http://freeimage.sourceforge.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRequires:	png-devel
+BuildRequires:	mng-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	tiff-devel
+BuildRequires:	OpenEXR-devel
+Obsoletes: %{oname}
 
 %description
 %{common_description}
@@ -37,13 +45,15 @@ Group:		System/Libraries
 This package contains the library needed to run programs dynamically
 linked with %{name}.
 
-%package -n	%{lib_name}-devel
+%package -n	%{devel_name}
 Summary:	Development tools for programs using %{name}
 Group:		Development/C
 Requires:	%{lib_name} = %{version}
 Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:	lib%{name}3-devel
+Obsoletes:	lib%{oname}3-devel
 
-%description -n	%{lib_name}-devel
+%description -n	%{devel_name}
 %{common_description}
 
 This package contains the header files and libraries needed for
@@ -79,7 +89,7 @@ rm -rf %{buildroot}
 %doc README.linux
 %{_libdir}/*.so.%{lib_major}*
 
-%files -n %{lib_name}-devel
+%files -n %{devel_name}
 %defattr(-,root,root)
 %{_includedir}/%{oname}.h
 %{_libdir}/*.a
