@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 2
+%define release %mkrel 3
 %define oname FreeImage
 %define oversion 3.11.0
 %define common_summary Image library
@@ -118,9 +118,10 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc README.linux
 %{_libdir}/*.so.%{lib_major}*
+%{_libdir}/libfreeimage-%{oversion}.so
 
 %files -n %{devel_name}
 %defattr(-,root,root)
 %{_includedir}/%{oname}.h
 %{_libdir}/*.a
-%{_libdir}/*.so
+%{_libdir}/libfreeimage.so
