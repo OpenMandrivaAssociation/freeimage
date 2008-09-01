@@ -1,9 +1,8 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 1
+%define release %mkrel 2
 %define oname FreeImage
-%define oversion %(echo %{version} | sed -e 's/\\.//g')
-%define distname %{oname}%{oversion}
+%define oversion 3.11.0
 %define common_summary Image library
 %define common_description FreeImage is an Open Source library project for developers who would\
 like to support popular graphics image formats like PNG, BMP, JPEG,\
@@ -20,16 +19,18 @@ Summary: %{common_summary}
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: %{distname}.zip
-License: GPL
+Source0: %{oname}3110.zip
+Patch0:	FreeImage-3.11.0-syslibs.patch
+License: GPLv2+
 Group: System/Libraries
-Url: http://freeimage.sourceforge.net/
+URL: http://freeimage.sourceforge.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	png-devel
 BuildRequires:	mng-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	OpenEXR-devel
+BuildRequires:	openjpeg-devel
 Obsoletes: %{oname}
 
 %description
@@ -61,11 +62,40 @@ developing programs using the %{name} library.
 
 %prep
 %setup -q -n %{oname}
+%patch0 -p1 -z .syslibs
+touch -r Source/FreeImage.h.syslibs Source/FreeImage.h
+
+# remove all included libs to make sure these don't get used during compile
+rm -r Source/Lib* Source/ZLib Source/OpenEXR
+
+# some encoding / line ending cleanups
+iconv -f ISO-8859-1 -t UTF-8 Whatsnew.txt > Whatsnew.txt.tmp
+touch -r Whatsnew.txt Whatsnew.txt.tmp
+mv Whatsnew.txt.tmp Whatsnew.txt
+sed -i 's/\r//g' Whatsnew.txt license-*.txt gensrclist.sh \
+  Wrapper/FreeImagePlus/WhatsNew_FIP.txt
+
 perl -pi -e 's/ -o root -g root//' Makefile.gnu
 perl -pi -e 's/\bldconfig//' Makefile.gnu
 
+
+
 %build
-%make
+sh ./gensrclist.sh
+make %{?_smp_mflags} \
+  COMPILERFLAGS="$RPM_OPT_FLAGS -fPIC -fvisibility=hidden `pkg-config --cflags OpenEXR`"
+
+# build libfreeimageplus DIY, as the provided makefile makes libfreeimageplus
+# contain a private copy of libfreeimage <sigh>
+FIP_OBJS=
+for i in Wrapper/FreeImagePlus/src/fip*.cpp; do
+  gcc -o $i.o $RPM_OPT_FLAGS -fPIC -fvisibility=hidden \
+    -ISource -IWrapper/FreeImagePlus -c $i
+  FIP_OBJS="$FIP_OBJS $i.o"
+done
+gcc -shared -LDist -o Dist/lib%{name}plus-%{oversion}.so \
+  -Wl,-soname,lib%{name}plus.so.%{lib_major} $FIP_OBJS -lfreeimage-%{oversion}
+
 
 %install
 rm -rf %{buildroot}
