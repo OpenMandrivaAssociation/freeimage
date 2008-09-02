@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 5
+%define release %mkrel 6
 %define oname FreeImage
 %define oversion 3.11.0
 %define common_summary Image library
@@ -83,20 +83,7 @@ perl -pi -e 's/\bldconfig//' Makefile.gnu
 
 %build
 sh ./gensrclist.sh
-#%make COMPILERFLAGS="$RPM_OPT_FLAGS -fPIC -fvisibility=hidden `pkg-config --cflags OpenEXR`"
 %make
-
-# build libfreeimageplus DIY, as the provided makefile makes libfreeimageplus
-# contain a private copy of libfreeimage <sigh>
-#FIP_OBJS=
-#for i in Wrapper/FreeImagePlus/src/fip*.cpp; do
-#  gcc -o $i.o $RPM_OPT_FLAGS -fPIC -fvisibility=hidden \
-#    -ISource -IWrapper/FreeImagePlus -c $i
-#  FIP_OBJS="$FIP_OBJS $i.o"
-#done
-#gcc -shared -LDist -o Dist/lib%{name}plus-%{oversion}.so \
-#  -Wl,-soname,lib%{name}plus.so.%{major} $FIP_OBJS -lfreeimage-%{oversion}
-
 
 %install
 rm -rf %{buildroot}
@@ -105,20 +92,6 @@ mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
 %make install \
   INCDIR=%{buildroot}%{_includedir} \
   INSTALLDIR=%{buildroot}%{_libdir}
-
-
-#install -m 755 Dist/lib%{name}-%{oversion}.so %{buildroot}%{_libdir}
-#ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so.%{major}
-#ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so
-
-#install -m 755 Dist/lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}
-#ln -s lib%{name}plus-%{oversion}.so \
-#  %{buildroot}%{_libdir}/lib%{name}plus.so.%{major}
-#ln -s lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}plus.so
-
-#install -p -m 644 Source/FreeImage.h %{buildroot}%{_includedir}
-#install -p -m 644 Wrapper/FreeImagePlus/FreeImagePlus.h \
-#  %{buildroot}%{_includedir}
 
 
 %clean
