@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 3
+%define release %mkrel 4
 %define oname FreeImage
 %define oversion 3.11.0
 %define common_summary Image library
@@ -11,8 +11,8 @@ FreeImage is easy to use, fast, multithreading safe, compatible with\
 all 32-bit versions of Windows, and cross-platform (works both with\
 Linux and Mac OS X).
 
-%define lib_major 3
-%define lib_name %mklibname %{name} %{lib_major}
+%define major 3
+%define lib_name %mklibname %{name} %{major}
 %define devel_name %mklibname %{name} -d
 
 Summary: %{common_summary}
@@ -94,15 +94,26 @@ for i in Wrapper/FreeImagePlus/src/fip*.cpp; do
   FIP_OBJS="$FIP_OBJS $i.o"
 done
 gcc -shared -LDist -o Dist/lib%{name}plus-%{oversion}.so \
-  -Wl,-soname,lib%{name}plus.so.%{lib_major} $FIP_OBJS -lfreeimage-%{oversion}
+  -Wl,-soname,lib%{name}plus.so.%{major} $FIP_OBJS -lfreeimage-%{oversion}
 
 
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
-%make install \
-  INCDIR=%{buildroot}%{_includedir} \
-  INSTALLDIR=%{buildroot}%{_libdir}
+
+install -m 755 Dist/lib%{name}-%{oversion}.so %{buildroot}%{_libdir}
+ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so.%{major}
+ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so
+
+install -m 755 Dist/lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}
+ln -s lib%{name}plus-%{oversion}.so \
+  %{buildroot}%{_libdir}/lib%{name}plus.so.%{major}
+ln -s lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}plus.so
+
+install -p -m 644 Source/FreeImage.h %{buildroot}%{_includedir}
+install -p -m 644 Wrapper/FreeImagePlus/FreeImagePlus.h \
+  %{buildroot}%{_includedir}
+
 
 %clean
 rm -rf %{buildroot}
@@ -116,12 +127,17 @@ rm -rf %{buildroot}
 
 %files -n %{lib_name}
 %defattr(-,root,root)
-%doc README.linux
-%{_libdir}/*.so.%{lib_major}*
-%{_libdir}/libfreeimage-%{oversion}.so
+%doc Whatsnew.txt license-*.txt Wrapper/FreeImagePlus/WhatsNew_FIP.txt README.linux
+%{_libdir}/lib%{name}.so.%{major}
+%{_libdir}/lib%{name}plus.so.%{major}
+%{_libdir}/lib%{name}-%{oversion}.so
+%{_libdir}/lib%{name}plus-%{oversion}.so
 
 %files -n %{devel_name}
 %defattr(-,root,root)
-%{_includedir}/%{oname}.h
-%{_libdir}/*.a
-%{_libdir}/libfreeimage.so
+%{_includedir}/%{oname}*.h
+%{_libdir}/lib%{name}.so
+%{_libdir}/lib%{name}plus.so
+
+
+
