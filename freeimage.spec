@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 4
+%define release %mkrel 5
 %define oname FreeImage
 %define oversion 3.11.0
 %define common_summary Image library
@@ -63,6 +63,7 @@ developing programs using the %{name} library.
 %prep
 %setup -q -n %{oname}
 %patch0 -p1 -z .syslibs
+
 touch -r Source/FreeImage.h.syslibs Source/FreeImage.h
 
 # remove all included libs to make sure these don't get used during compile
@@ -82,37 +83,42 @@ perl -pi -e 's/\bldconfig//' Makefile.gnu
 
 %build
 sh ./gensrclist.sh
-make %{?_smp_mflags} \
-  COMPILERFLAGS="$RPM_OPT_FLAGS -fPIC -fvisibility=hidden `pkg-config --cflags OpenEXR`"
+#%make COMPILERFLAGS="$RPM_OPT_FLAGS -fPIC -fvisibility=hidden `pkg-config --cflags OpenEXR`"
+%make
 
 # build libfreeimageplus DIY, as the provided makefile makes libfreeimageplus
 # contain a private copy of libfreeimage <sigh>
-FIP_OBJS=
-for i in Wrapper/FreeImagePlus/src/fip*.cpp; do
-  gcc -o $i.o $RPM_OPT_FLAGS -fPIC -fvisibility=hidden \
-    -ISource -IWrapper/FreeImagePlus -c $i
-  FIP_OBJS="$FIP_OBJS $i.o"
-done
-gcc -shared -LDist -o Dist/lib%{name}plus-%{oversion}.so \
-  -Wl,-soname,lib%{name}plus.so.%{major} $FIP_OBJS -lfreeimage-%{oversion}
+#FIP_OBJS=
+#for i in Wrapper/FreeImagePlus/src/fip*.cpp; do
+#  gcc -o $i.o $RPM_OPT_FLAGS -fPIC -fvisibility=hidden \
+#    -ISource -IWrapper/FreeImagePlus -c $i
+#  FIP_OBJS="$FIP_OBJS $i.o"
+#done
+#gcc -shared -LDist -o Dist/lib%{name}plus-%{oversion}.so \
+#  -Wl,-soname,lib%{name}plus.so.%{major} $FIP_OBJS -lfreeimage-%{oversion}
 
 
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
 
-install -m 755 Dist/lib%{name}-%{oversion}.so %{buildroot}%{_libdir}
-ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so.%{major}
-ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so
+%make install \
+  INCDIR=%{buildroot}%{_includedir} \
+  INSTALLDIR=%{buildroot}%{_libdir}
 
-install -m 755 Dist/lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}
-ln -s lib%{name}plus-%{oversion}.so \
-  %{buildroot}%{_libdir}/lib%{name}plus.so.%{major}
-ln -s lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}plus.so
 
-install -p -m 644 Source/FreeImage.h %{buildroot}%{_includedir}
-install -p -m 644 Wrapper/FreeImagePlus/FreeImagePlus.h \
-  %{buildroot}%{_includedir}
+#install -m 755 Dist/lib%{name}-%{oversion}.so %{buildroot}%{_libdir}
+#ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so.%{major}
+#ln -s lib%{name}-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}.so
+
+#install -m 755 Dist/lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}
+#ln -s lib%{name}plus-%{oversion}.so \
+#  %{buildroot}%{_libdir}/lib%{name}plus.so.%{major}
+#ln -s lib%{name}plus-%{oversion}.so %{buildroot}%{_libdir}/lib%{name}plus.so
+
+#install -p -m 644 Source/FreeImage.h %{buildroot}%{_includedir}
+#install -p -m 644 Wrapper/FreeImagePlus/FreeImagePlus.h \
+#  %{buildroot}%{_includedir}
 
 
 %clean
@@ -129,15 +135,13 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc Whatsnew.txt license-*.txt Wrapper/FreeImagePlus/WhatsNew_FIP.txt README.linux
 %{_libdir}/lib%{name}.so.%{major}
-%{_libdir}/lib%{name}plus.so.%{major}
 %{_libdir}/lib%{name}-%{oversion}.so
-%{_libdir}/lib%{name}plus-%{oversion}.so
 
 %files -n %{devel_name}
 %defattr(-,root,root)
 %{_includedir}/%{oname}*.h
 %{_libdir}/lib%{name}.so
-%{_libdir}/lib%{name}plus.so
+%{_libdir}/lib%{name}.a
 
 
 
