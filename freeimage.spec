@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 7
+%define release %mkrel 8
 %define oname FreeImage
 %define oversion 3.11.0
 %define common_summary Image library
@@ -39,6 +39,7 @@ Obsoletes: %{oname}
 %package -n	%{lib_name}
 Summary:	A library to %{common_summary}
 Group:		System/Libraries
+Obsoletes:	%{_lib}%{oname}3 < 3.110
 
 %description -n	%{lib_name}
 %{common_description}
@@ -53,6 +54,7 @@ Requires:	%{lib_name} = %{version}
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	lib%{name}3-devel
 Obsoletes:	lib%{oname}3-devel
+Obsoletes:	%{_lib}%{oname}3-devel < 3.110
 
 %description -n	%{devel_name}
 %{common_description}
