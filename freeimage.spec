@@ -1,6 +1,6 @@
 %define name freeimage
 %define version 3.110
-%define release %mkrel 8
+%define release %mkrel 9
 %define oname FreeImage
 %define oversion 3.11.0
 %define common_summary Image library
