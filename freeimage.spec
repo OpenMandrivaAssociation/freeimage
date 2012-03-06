@@ -1,8 +1,8 @@
 %define name freeimage
-%define version 3.110
-%define release %mkrel 9
+%define version 3.151
+%define release 1
 %define oname FreeImage
-%define oversion 3.11.0
+%define oversion 3.15.1
 %define common_summary Image library
 %define common_description FreeImage is an Open Source library project for developers who would\
 like to support popular graphics image formats like PNG, BMP, JPEG,\
@@ -19,18 +19,19 @@ Summary: %{common_summary}
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: %{oname}3110.zip
+Source0: http://downloads.sourceforge.net/freeimage/FreeImage3151.zip
 Patch0:	FreeImage-3.11.0-syslibs.patch
 License: GPLv2+
 Group: System/Libraries
 URL: http://freeimage.sourceforge.net/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+%if 0
 BuildRequires:	png-devel
 BuildRequires:	mng-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	OpenEXR-devel
 BuildRequires:	openjpeg-devel
+%endif
 Obsoletes: %{oname}
 
 %description
@@ -64,7 +65,8 @@ developing programs using the %{name} library.
 
 %prep
 %setup -q -n %{oname}
-%patch0 -p1 -z .syslibs
+%if 0
+%patch0 -p1 -b .syslibs
 
 touch -r Source/FreeImage.h.syslibs Source/FreeImage.h
 
@@ -75,17 +77,17 @@ rm -r Source/Lib* Source/ZLib Source/OpenEXR
 iconv -f ISO-8859-1 -t UTF-8 Whatsnew.txt > Whatsnew.txt.tmp
 touch -r Whatsnew.txt Whatsnew.txt.tmp
 mv Whatsnew.txt.tmp Whatsnew.txt
+%endif
 sed -i 's/\r//g' Whatsnew.txt license-*.txt gensrclist.sh \
   Wrapper/FreeImagePlus/WhatsNew_FIP.txt
 
 perl -pi -e 's/ -o root -g root//' Makefile.gnu
 perl -pi -e 's/\bldconfig//' Makefile.gnu
 
-
-
 %build
 sh ./gensrclist.sh
-%make
+%setup_compile_flags CFLAGS="%optflags -fPIC"
+%make LIBRARIES="-lstdc++ -lm"
 
 %install
 rm -rf %{buildroot}
@@ -96,27 +98,13 @@ mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
   INSTALLDIR=%{buildroot}%{_libdir}
 
 
-%clean
-rm -rf %{buildroot}
-
-%if %mdkversion < 200900
-%post -n %{lib_name} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{lib_name} -p /sbin/ldconfig
-%endif
-
 %files -n %{lib_name}
-%defattr(-,root,root)
 %doc Whatsnew.txt license-*.txt Wrapper/FreeImagePlus/WhatsNew_FIP.txt README.linux
 %{_libdir}/lib%{name}.so.%{major}
 %{_libdir}/lib%{name}-%{oversion}.so
 
 %files -n %{devel_name}
-%defattr(-,root,root)
 %{_includedir}/%{oname}*.h
 %{_libdir}/lib%{name}.so
 %{_libdir}/lib%{name}.a
-
-
 
