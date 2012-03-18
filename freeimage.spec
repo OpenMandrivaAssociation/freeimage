@@ -1,8 +1,8 @@
 %define name freeimage
-%define version 3.151
+%define version 3.153
 %define release 1
 %define oname FreeImage
-%define oversion 3.15.1
+%define oversion 3.15.3
 %define common_summary Image library
 %define common_description FreeImage is an Open Source library project for developers who would\
 like to support popular graphics image formats like PNG, BMP, JPEG,\
@@ -19,7 +19,7 @@ Summary: %{common_summary}
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: http://downloads.sourceforge.net/freeimage/FreeImage3151.zip
+Source0: http://downloads.sourceforge.net/freeimage/FreeImage3153.zip
 Patch0:	FreeImage-3.11.0-syslibs.patch
 License: GPLv2+
 Group: System/Libraries
