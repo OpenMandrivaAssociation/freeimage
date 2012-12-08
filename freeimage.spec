@@ -108,3 +108,73 @@ mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
 %{_libdir}/lib%{name}.so
 %{_libdir}/lib%{name}.a
 
+
+
+%changelog
+* Sun Mar 18 2012 Alexander Khrukin <akhrukin@mandriva.org> 3.153-1
++ Revision: 785480
+- version update 3153
+
+* Tue Mar 06 2012 Alexander Khrukin <akhrukin@mandriva.org> 3.151-1
++ Revision: 782378
+- version update  3151
+
+* Sun Dec 05 2010 Oden Eriksson <oeriksson@mandriva.com> 3.110-9mdv2011.0
++ Revision: 610755
+- rebuild
+
+* Wed Mar 17 2010 Anssi Hannula <anssi@mandriva.org> 3.110-8mdv2010.1
++ Revision: 524741
+- rediff syslibs.patch
+- add more obsoletes
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+
+* Tue Sep 02 2008 Emmanuel Andry <eandry@mandriva.org> 3.110-6mdv2009.0
++ Revision: 279299
+- fix P0 (initG3 was still present in Plugin.cpp)
+
+* Tue Sep 02 2008 Emmanuel Andry <eandry@mandriva.org> 3.110-5mdv2009.0
++ Revision: 279259
+- don't need freeimageplus
+- use makeinstall macro, does a better job than a manual install
+
+* Tue Sep 02 2008 Emmanuel Andry <eandry@mandriva.org> 3.110-4mdv2009.0
++ Revision: 279171
+- add missing symlinks
+- manually install files, makeinstall forget files
+- package doc
+
+* Tue Sep 02 2008 Emmanuel Andry <eandry@mandriva.org> 3.110-3mdv2009.0
++ Revision: 278766
+- move file in the right package
+
+* Mon Sep 01 2008 Emmanuel Andry <eandry@mandriva.org> 3.110-2mdv2009.0
++ Revision: 278487
+- fix license
+- use system libs with P0 from fedora (rediffed)
+- BR openjpeg-devel
+
+* Mon Aug 18 2008 Emmanuel Andry <eandry@mandriva.org> 3.110-1mdv2009.0
++ Revision: 273176
+- New version
+- fully apply libraries policy
+- add missing BR
+
+* Tue Jul 22 2008 Thierry Vignaud <tv@mandriva.org> 3.93-3mdv2009.0
++ Revision: 240722
+- rebuild
+- kill re-definition of %%buildroot on Pixel's request
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+  + Olivier Blin <blino@mandriva.org>
+    - restore BuildRoot
+
+* Fri Apr 27 2007 Olivier Blin <blino@mandriva.org> 3.93-1mdv2008.0
++ Revision: 18678
+- initial FreeImage package
+- Create freeimage
+
