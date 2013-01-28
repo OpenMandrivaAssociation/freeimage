@@ -1,3 +1,4 @@
+%define debug_package	%nil
 %define name freeimage
 %define version 3.153
 %define release 1
