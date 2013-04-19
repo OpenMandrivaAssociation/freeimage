@@ -9,7 +9,7 @@
 Summary:	Image library
 Name:		freeimage
 Version:	3.153
-Release:	3.15.3
+Release:	2
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
@@ -23,7 +23,6 @@ BuildRequires:	tiff-devel
 BuildRequires:	OpenEXR-devel
 BuildRequires:	openjpeg-devel
 %endif
-Obsoletes:	%{oname}
 
 %description
 FreeImage is an Open Source library project for developers who would
