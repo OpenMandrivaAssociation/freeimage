@@ -75,7 +75,7 @@ sed -i -e 's/\bldconfig//' Makefile.gnu
 %build
 sh ./gensrclist.sh
 %setup_compile_flags CFLAGS="%optflags -fPIC"
-%make LIBRARIES="-std=c++11 -lstdc++ -lm"
+%make LIBRARIES="-std=c++11 -Wno-c++11-narrowing -lstdc++ -lm"
 
 %install
 mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
