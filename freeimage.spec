@@ -13,7 +13,7 @@ Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/freeimage/FreeImage3153.zip
+Source0:	http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
 Patch0:		FreeImage-3.11.0-syslibs.patch
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libmng)
