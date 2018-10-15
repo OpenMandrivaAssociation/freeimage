@@ -1,28 +1,27 @@
 %define debug_package	%nil
 
 %define oname	FreeImage
-%define oversion 3.15.3
+%define oversion 3.18.0
 %define major	3
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 
 Summary:	Image library
 Name:		freeimage
-Version:	3.153
-Release:	10
+Version:	3.180
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/freeimage/FreeImage3153.zip
 Patch0:		FreeImage-3.11.0-syslibs.patch
-%if 0
-BuildRequires:	png-devel
-BuildRequires:	mng-devel
-BuildRequires:	jpeg-devel
-BuildRequires:	tiff-devel
-BuildRequires:	OpenEXR-devel
-BuildRequires:	openjpeg-devel
-%endif
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(libmng)
+BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	pkgconfig(libtiff-4)
+BuildRequires:	pkgconfig(OpenEXR)
+BuildRequires:	pkgconfig(libopenjp2)
+
 
 %description
 FreeImage is an Open Source library project for developers who would
@@ -51,7 +50,7 @@ This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
 %prep
-%setup -qn %{oname}
+%autosetup -n %{oname}
 %if 0
 %patch0 -p1 -b .syslibs
 
@@ -75,12 +74,12 @@ sed -i -e 's/\bldconfig//' Makefile.gnu
 %build
 sh ./gensrclist.sh
 %setup_compile_flags CFLAGS="%optflags -fPIC"
-%make LIBRARIES="-std=c++11 -Wno-c++11-narrowing -lstdc++ -lm"
+%make_build LIBRARIES="-std=c++11 -Wno-c++11-narrowing -lstdc++ -lm"
 
 %install
 mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
 
-%make install \
+%make_install \
   INCDIR=%{buildroot}%{_includedir} \
   INSTALLDIR=%{buildroot}%{_libdir}
 
