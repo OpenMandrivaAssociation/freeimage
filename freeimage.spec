@@ -14,14 +14,20 @@ License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
-Patch0:		FreeImage-3.11.0-syslibs.patch
+# Unbundle bundled libraries
+Patch0:         FreeImage_unbundle.patch
+# Fix incorrect path in doxyfile
+Patch1:         FreeImage_doxygen.patch
+# Fix incorrect variable names in BIGENDIAN blocks
+Patch2:         FreeImage_bigendian.patch
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libmng)
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(libopenjp2)
-
+BuildRequires:	pkgconfig(libwebp)
+BuildRequires:	pkgconfig(libraw)
 
 %description
 FreeImage is an Open Source library project for developers who would
@@ -50,40 +56,47 @@ This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
 %prep
-%autosetup -n %{oname}
-%if 0
-%patch0 -p1 -b .syslibs
-
-touch -r Source/FreeImage.h.syslibs Source/FreeImage.h
+%autosetup -p1 -n %{oname}
 
 # remove all included libs to make sure these don't get used during compile
 rm -r Source/Lib* Source/ZLib Source/OpenEXR
 
-# some encoding / line ending cleanups
-iconv -f ISO-8859-1 -t UTF-8 Whatsnew.txt > Whatsnew.txt.tmp
-touch -r Whatsnew.txt Whatsnew.txt.tmp
-mv Whatsnew.txt.tmp Whatsnew.txt
-%endif
+# clear files which cannot be built due to dependencies on private headers
+# (see also unbundle patch)
+> Source/FreeImage/PluginG3.cpp
+> Source/FreeImageToolkit/JPEGTransform.cpp
 
-sed -i 's/\r//g' Whatsnew.txt license-*.txt gensrclist.sh \
-  Wrapper/FreeImagePlus/WhatsNew_FIP.txt
-
-sed -i -e 's/ -o root -g root//' Makefile.gnu
-sed -i -e 's/\bldconfig//' Makefile.gnu
+# sanitize encodings / line endings
+for file in `find . -type f -name '*.c' -or -name '*.cpp' -or -name '*.h' -or -name '*.txt' -or -name Makefile`; do
+  iconv --from=ISO-8859-15 --to=UTF-8 $file > $file.new && \
+  sed -i 's|\r||g' $file.new && \
+  touch -r $file $file.new && mv $file.new $file
+done
 
 %build
 sh ./gensrclist.sh
-%setup_compile_flags CFLAGS="%optflags -fPIC"
+sh ./genfipsrclist.sh
+
+%ifarch %{armx}
+%make_build -f Makefile.gnu CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
+%make_build -f Makefile.fip CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
+%else
+%make_build -f Makefile.gnu CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
+%make_build -f Makefile.fip CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
+%endif
+
+pushd Wrapper/FreeImagePlus/doc
+doxygen FreeImagePlus.dox
+popd
 %make_build LIBRARIES="-std=c++11 -Wno-c++11-narrowing -lstdc++ -lm"
 
 %install
-mkdir -p %{buildroot}%{_includedir} %{buildroot}%{_libdir}
-
 %make_install \
-  INCDIR=%{buildroot}%{_includedir} \
-  INSTALLDIR=%{buildroot}%{_libdir}
+ 	  INCDIR=%{buildroot}%{_includedir} \
+ 	  INSTALLDIR=%{buildroot}%{_libdir}
 
-rm -f %{buildroot}%{_libdir}/*.a
+# We don't package static libs
+rm -f %{buildroot}%{_libdir}/lib%{name}.a
 
 %files -n %{libname}
 %doc Whatsnew.txt license-*.txt Wrapper/FreeImagePlus/WhatsNew_FIP.txt README.linux
