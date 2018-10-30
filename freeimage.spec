@@ -9,7 +9,7 @@
 Summary:	Image library
 Name:		freeimage
 Version:	3.180
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
