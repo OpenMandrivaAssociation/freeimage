@@ -78,13 +78,13 @@ done
 sh ./gensrclist.sh
 sh ./genfipsrclist.sh
 
-%ifarch %{armx}
-%make_build -f Makefile.gnu CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
-%make_build -f Makefile.fip CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
-%else
-%make_build -f Makefile.gnu CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
-%make_build -f Makefile.fip CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
-%endif
+#%ifarch %{armx}
+#%make_build -f Makefile.gnu CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
+#%make_build -f Makefile.fip CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
+#%else
+#%make_build -f Makefile.gnu CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
+#%make_build -f Makefile.fip CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
+#%endif
 
 pushd Wrapper/FreeImagePlus/doc
 doxygen FreeImagePlus.dox
