@@ -20,6 +20,9 @@ Patch0:         FreeImage_unbundle.patch
 Patch1:         FreeImage_doxygen.patch
 # Fix incorrect variable names in BIGENDIAN blocks
 Patch2:         FreeImage_bigendian.patch
+# Fixing permission issue (cannot change ownership of ...) MGA patch.
+Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
+BuildRequires:  doxygen
 BuildRequires:  jxrlib-devel
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libmng)
@@ -78,13 +81,13 @@ done
 sh ./gensrclist.sh
 sh ./genfipsrclist.sh
 
-%ifarch %{armx}
-%make_build -f Makefile.gnu CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
-%make_build -f Makefile.fip CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
-%else
-%make_build -f Makefile.gnu CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
-%make_build -f Makefile.fip CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
-%endif
+#%ifarch %{armx}
+#%make_build -f Makefile.gnu CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
+#%make_build -f Makefile.fip CFLAGS="%{optflags} -fPIC" CXXFLAGS="%{optflags} -fPIC" LDFLAGS="%{_ldflags}"
+#%else
+#%make_build -f Makefile.gnu CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
+#%make_build -f Makefile.fip CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{_ldflags}"
+#%endif
 
 pushd Wrapper/FreeImagePlus/doc
 doxygen FreeImagePlus.dox
