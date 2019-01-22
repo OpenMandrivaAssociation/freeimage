@@ -20,6 +20,7 @@ Patch0:         FreeImage_unbundle.patch
 Patch1:         FreeImage_doxygen.patch
 # Fix incorrect variable names in BIGENDIAN blocks
 Patch2:         FreeImage_bigendian.patch
+BuildRequires:  jxrlib-devel
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libmng)
 BuildRequires:	pkgconfig(libjpeg)
