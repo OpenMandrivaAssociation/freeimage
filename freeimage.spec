@@ -20,6 +20,8 @@ Patch0:         FreeImage_unbundle.patch
 Patch1:         FreeImage_doxygen.patch
 # Fix incorrect variable names in BIGENDIAN blocks
 Patch2:         FreeImage_bigendian.patch
+# Fixing permission issue (cannot change ownership of ...) MGA patch.
+Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
 BuildRequires:  doxygen
 BuildRequires:  jxrlib-devel
 BuildRequires:	pkgconfig(libpng)
