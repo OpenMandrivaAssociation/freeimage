@@ -2,7 +2,7 @@
 
 %define oname	FreeImage
 %define oversion 3.18.0
-%define major	4
+%define major	3
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 
@@ -106,7 +106,7 @@ rm -f %{buildroot}%{_libdir}/lib%{name}.a
 
 %files -n %{libname}
 %doc Whatsnew.txt license-*.txt Wrapper/FreeImagePlus/WhatsNew_FIP.txt README.linux
-#{_libdir}/lib%{name}.so.%{major}
+%{_libdir}/lib%{name}.so.%{major}
 %{_libdir}/lib%{name}-%{oversion}.so
 
 %files -n %{devname}
