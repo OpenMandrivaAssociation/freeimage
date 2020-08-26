@@ -2,14 +2,14 @@
 
 %define oname	FreeImage
 %define oversion 3.18.0
-%define major	4
+%define major	3
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 
 Summary:	Image library
 Name:		freeimage
 Version:	3.180
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
@@ -22,6 +22,8 @@ Patch1:         FreeImage_doxygen.patch
 Patch2:         FreeImage_bigendian.patch
 # Fixing permission issue (cannot change ownership of ...) MGA patch.
 Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
+# Fix compiling with raw 0.20.0 https://bugs.gentoo.org/734724
+Patch11:        fix-compiling-with-libraw-0.20.0.diff
 BuildRequires:  doxygen
 BuildRequires:  jxrlib-devel
 BuildRequires:	pkgconfig(libpng)
