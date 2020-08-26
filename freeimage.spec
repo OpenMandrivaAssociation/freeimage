@@ -2,7 +2,7 @@
 
 %define oname	FreeImage
 %define oversion 3.18.0
-%define major	3
+%define major	4
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 
