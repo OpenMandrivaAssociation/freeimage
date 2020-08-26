@@ -106,7 +106,7 @@ rm -f %{buildroot}%{_libdir}/lib%{name}.a
 
 %files -n %{libname}
 %doc Whatsnew.txt license-*.txt Wrapper/FreeImagePlus/WhatsNew_FIP.txt README.linux
-%{_libdir}/lib%{name}.so.%{major}
+#{_libdir}/lib%{name}.so.%{major}
 %{_libdir}/lib%{name}-%{oversion}.so
 
 %files -n %{devname}
