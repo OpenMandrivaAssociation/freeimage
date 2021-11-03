@@ -1,15 +1,15 @@
-%define debug_package	%nil
-
 %define oname	FreeImage
 %define oversion 3.18.0
 %define major	3
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
+# For incomplete debug packages
+%global _empty_manifest_terminate_build 0
 
 Summary:	Image library
 Name:		freeimage
 Version:	3.180
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
@@ -30,7 +30,7 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libmng)
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(libtiff-4)
-BuildRequires:	pkgconfig(OpenEXR)
+BuildRequires:	pkgconfig(OpenEXR) < 3.0.0
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(libwebp)
 BuildRequires:	pkgconfig(libraw)
