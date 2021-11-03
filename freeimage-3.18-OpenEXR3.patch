@@ -1,0 +1,52 @@
+diff -up FreeImage/Source/FreeImage/PluginEXR.cpp.6~ FreeImage/Source/FreeImage/PluginEXR.cpp
+--- FreeImage/Source/FreeImage/PluginEXR.cpp.6~	2021-11-03 16:14:59.291455131 +0100
++++ FreeImage/Source/FreeImage/PluginEXR.cpp	2021-11-03 16:14:59.316455095 +0100
+@@ -37,7 +37,7 @@
+ #include <OpenEXR/ImfRgba.h>
+ #include <OpenEXR/ImfArray.h>
+ #include <OpenEXR/ImfPreviewImage.h>
+-#include <OpenEXR/half.h>
++#include <half.h>
+ 
+ 
+ // ==========================================================
+@@ -66,11 +66,11 @@ public:
+ 		return ((unsigned)n != _io->read_proc(c, 1, n, _handle));
+ 	}
+ 
+-	virtual Imath::Int64 tellg() {
++	virtual uint64_t tellg() {
+ 		return _io->tell_proc(_handle);
+ 	}
+ 
+-	virtual void seekg(Imath::Int64 pos) {
++	virtual void seekg(uint64_t pos) {
+ 		_io->seek_proc(_handle, (unsigned)pos, SEEK_SET);
+ 	}
+ 
+@@ -100,11 +100,11 @@ public:
+ 		}
+ 	}
+ 
+-	virtual Imath::Int64 tellp() {
++	virtual uint64_t tellp() {
+ 		return _io->tell_proc(_handle);
+ 	}
+ 
+-	virtual void seekp(Imath::Int64 pos) {
++	virtual void seekp(uint64_t pos) {
+ 		_io->seek_proc(_handle, (unsigned)pos, SEEK_SET);
+ 	}
+ };
+diff -up FreeImage/Source/FreeImage/PluginTIFF.cpp.6~ FreeImage/Source/FreeImage/PluginTIFF.cpp
+--- FreeImage/Source/FreeImage/PluginTIFF.cpp.6~	2021-11-03 16:14:59.316455095 +0100
++++ FreeImage/Source/FreeImage/PluginTIFF.cpp	2021-11-03 16:15:18.081428971 +0100
+@@ -39,7 +39,7 @@
+ #include "Utilities.h"
+ #include <tiffio.h>
+ #include "../Metadata/FreeImageTag.h"
+-#include <OpenEXR/half.h>
++#include <half.h>
+ 
+ #include "FreeImageIO.h"
+ #include "PSDParser.h"
