@@ -26,6 +26,7 @@ Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
 Patch11:        fix-compiling-with-libraw-0.20.0.diff
 Patch12:	freeimage-3.18-OpenEXR3.patch
 BuildRequires:  doxygen
+BuildRequires:  glibc
 BuildRequires:  jxrlib-devel
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libmng)
