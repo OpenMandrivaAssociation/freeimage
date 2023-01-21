@@ -22,8 +22,7 @@ Patch1:         FreeImage_doxygen.patch
 Patch2:         FreeImage_bigendian.patch
 # Fixing permission issue (cannot change ownership of ...) MGA patch.
 Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
-# Fix compiling with raw 0.20.0 https://bugs.gentoo.org/734724
-Patch11:        fix-compiling-with-libraw-0.20.0.diff
+Patch11: freeimage-libraw-0.20-and-0.21.patch
 Patch12:	freeimage-3.18-OpenEXR3.patch
 BuildRequires:  doxygen
 BuildRequires:  glibc
@@ -75,11 +74,11 @@ rm -r Source/Lib* Source/ZLib Source/OpenEXR
 > Source/FreeImageToolkit/JPEGTransform.cpp
 
 # sanitize encodings / line endings
-for file in `find . -type f -name '*.c' -or -name '*.cpp' -or -name '*.h' -or -name '*.txt' -or -name Makefile`; do
-  iconv --from=ISO-8859-15 --to=UTF-8 $file > $file.new && \
-  sed -i 's|\r||g' $file.new && \
-  touch -r $file $file.new && mv $file.new $file
-done
+#for file in `find . -type f -name '*.c' -or -name '*.cpp' -or -name '*.h' -or -name '*.txt' -or -name Makefile`; do
+#iconv --from=ISO-8859-15 --to=UTF-8 $file > $file.new && \
+#  sed -i 's|\r||g' $file.new && \
+#  touch -r $file $file.new && mv $file.new $file
+#done
 
 %build
 sh ./gensrclist.sh
