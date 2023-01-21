@@ -75,11 +75,11 @@ rm -r Source/Lib* Source/ZLib Source/OpenEXR
 > Source/FreeImageToolkit/JPEGTransform.cpp
 
 # sanitize encodings / line endings
-for file in `find . -type f -name '*.c' -or -name '*.cpp' -or -name '*.h' -or -name '*.txt' -or -name Makefile`; do
-  iconv --from=ISO-8859-15 --to=UTF-8 $file > $file.new && \
-  sed -i 's|\r||g' $file.new && \
-  touch -r $file $file.new && mv $file.new $file
-done
+#for file in `find . -type f -name '*.c' -or -name '*.cpp' -or -name '*.h' -or -name '*.txt' -or -name Makefile`; do
+#iconv --from=ISO-8859-15 --to=UTF-8 $file > $file.new && \
+#  sed -i 's|\r||g' $file.new && \
+#  touch -r $file $file.new && mv $file.new $file
+#done
 
 %build
 sh ./gensrclist.sh
