@@ -1,15 +1,16 @@
 %define oname	FreeImage
 %define oversion 3.18.0
 %define major	3
-%define libname %mklibname %{name} %{major}
+%define oldlibname %mklibname %{name} 3
+%define libname %mklibname %{name}
 %define devname %mklibname %{name} -d
-# For incomplete debug packages
-%global _empty_manifest_terminate_build 0
+# Build system doesn't allow generating debugsource packages
+%undefine _debugsource_packages
 
 Summary:	Image library
 Name:		freeimage
 Version:	3.180
-Release:	8
+Release:	9
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://freeimage.sourceforge.net/
@@ -20,6 +21,8 @@ Patch0:         FreeImage_unbundle.patch
 Patch1:         FreeImage_doxygen.patch
 # Fix incorrect variable names in BIGENDIAN blocks
 Patch2:         FreeImage_bigendian.patch
+# Fix use of _TIFFDataSize (that has been removed in libtiff ages ago)
+Patch3:		freeimage-3.18-libtiff-4.4.patch
 # Fixing permission issue (cannot change ownership of ...) MGA patch.
 Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
 Patch11: freeimage-libraw-0.20-and-0.21.patch
@@ -47,6 +50,7 @@ Linux and Mac OS X).
 %package -n	%{libname}
 Summary:	A library to Image library
 Group:		System/Libraries
+%rename %{oldlibname}
 
 %description -n	%{libname}
 This package contains the library needed to run programs dynamically
@@ -95,7 +99,7 @@ sh ./genfipsrclist.sh
 pushd Wrapper/FreeImagePlus/doc
 doxygen FreeImagePlus.dox
 popd
-%make_build LIBRARIES="-std=c++11 -Wno-c++11-narrowing -lstdc++ -lm"
+%make_build LIBRARIES="-std=c++20 -Wno-c++11-narrowing -lstdc++ -lm"
 
 %install
 %make_install \
