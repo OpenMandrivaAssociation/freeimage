@@ -13,7 +13,7 @@ Version:	3.180
 Release:	13
 License:	GPLv2+
 Group:		System/Libraries
-Url:		http://freeimage.sourceforge.net/
+Url:		https://freeimage.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
 # Unbundle bundled libraries
 Patch0:         FreeImage_unbundle.patch
