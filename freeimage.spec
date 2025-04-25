@@ -9,12 +9,12 @@
 
 Summary:	Image library
 Name:		freeimage
-Version:	3.180
-Release:	13
+Version:	3.18.0
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://freeimage.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
+Source0:	http://downloads.sourceforge.net/freeimage/FreeImage%(echo %{version} |sed -e 's,\.,,g').zip
 # Unbundle bundled libraries
 Patch0:         FreeImage_unbundle.patch
 # Fix incorrect path in doxyfile
