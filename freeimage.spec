@@ -27,6 +27,7 @@ Patch3:		freeimage-3.18-libtiff-4.4.patch
 Patch10:        FreeImage-3.17.0-mga-makeinstall.patch
 Patch11: freeimage-libraw-0.20-and-0.21.patch
 Patch12:	freeimage-3.18-OpenEXR3.patch
+BuildRequires:	make
 BuildRequires:  doxygen
 BuildRequires:  glibc
 BuildRequires:  jxrlib-devel
